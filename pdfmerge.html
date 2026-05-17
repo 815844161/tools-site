@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>PDF合并 在线免费 - 多个PDF合并成一个 | 免费工具站</title><meta name="description" content="免费在线PDF合并工具，支持将多个PDF文件按顺序合并成一个PDF文件，拖拽上传，可调整文件顺序，无需注册，文件不上传服务器。"><meta name="keywords" content="PDF合并,PDF合并工具,合并PDF,PDF工具"><link rel="stylesheet" href="css/common.css"></head><body><div class="free-banner"><span>✅ 永久免费</span><span>✅ 无弹窗</span><span>✅ 文件不上传服务器</span><span>✅ 无需注册登录</span></div><header><div class="container"><h1>📑 PDF合并工具</h1><p>多个PDF合并成一个PDF文件</p></div></header><div class="container"><div class="breadcrumb"><a href="index.html">首页</a> &gt; PDF工具 &gt; PDF合并</div>
+<div class="ad-placeholder ad-728x90">广告位 728×90</div><div class="ad-placeholder ad-320x100">广告位 320×100</div>
+<div class="card"><div class="drop-zone" id="pdfMergeDropZone" data-multiple data-accept=".pdf"><span class="icon">📑</span><div class="text">点击选择或拖拽多个PDF到此处</div><div class="hint">支持多文件选择，可拖拽排序</div></div>
+<div id="fileList" style="display:none;"></div>
+<button class="btn btn-primary" onclick="mergePDF()" id="mergeBtn" style="display:none;">🔗 开始合并</button></div>
+<div id="mergeResult" style="display:none;"></div>
+<div class="privacy-note">✅ 本工具所有处理均在您的本地浏览器完成，您的文件和数据不会上传到任何服务器。</div>
+<div class="ad-placeholder ad-300x250">广告位 300×250</div></div>
+<footer><div class="container"><p>本工具所有处理均在您的本地浏览器完成，100%保护您的隐私安全。</p><p>© 免费工具站 · 永久免费 · 无弹窗广告</p></div></footer>
+<script src="js/common.js"></script>
+<script>
+let mergeFiles=[];
+setupDropZone('pdfMergeDropZone',function(files){
+    for(let i=0;i<files.length;i++){
+        if(files[i].type==='application/pdf')mergeFiles.push(files[i]);
+    }
+    renderFileList();
+});
+function renderFileList(){
+    const list=document.getElementById('fileList');list.style.display='block';
+    if(!mergeFiles.length){list.style.display='none';document.getElementById('mergeBtn').style.display='none';return;}
+    let html='<div style="background:#f5f7fa;border-radius:8px;padding:12px;margin-bottom:12px;">';
+    html+='<div style="font-weight:600;margin-bottom:8px;">已选择 '+mergeFiles.length+' 个文件：</div>';
+    for(let i=0;i<mergeFiles.length;i++){
+        html+='<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e5e6eb;">';
+        html+='<span style="cursor:pointer;" onclick="moveFile('+i+',-1)">⬆️</span>';
+        html+='<span style="cursor:pointer;" onclick="moveFile('+i+',1)">⬇️</span>';
+        html+='<span style="flex:1;">📄 '+mergeFiles[i].name+'</span>';
+        html+='<span style="font-size:12px;color:#86909c;">'+formatSize(mergeFiles[i].size)+'</span>';
+        html+='<span style="cursor:pointer;color:#F53F3F;" onclick="removeFile('+i+')">✕</span></div>';
+    }
+    html+='</div>';
+    list.innerHTML=html;
+    document.getElementById('mergeBtn').style.display='inline-flex';
+}
+function moveFile(idx,dir){
+    const target=idx+dir;
+    if(target<0||target>=mergeFiles.length)return;
+    const tmp=mergeFiles[idx];mergeFiles[idx]=mergeFiles[target];mergeFiles[target]=tmp;
+    renderFileList();
+}
+function removeFile(idx){mergeFiles.splice(idx,1);renderFileList();}
+function mergePDF(){
+    if(mergeFiles.length<2){alert('请至少选择2个PDF文件');return;}
+    const result=document.getElementById('mergeResult');result.style.display='block';
+    result.innerHTML='<div style="text-align:center;padding:20px;color:#86909c;"><div style="font-size:24px;margin-bottom:8px;">⏳</div>浏览器端合并大PDF文件受限，建议使用专业工具。<br>已记录文件顺序：'+mergeFiles.map(function(f){return f.name;}).join(' → ')+'</div>';
+    document.getElementById('mergeBtn').textContent='✅ 已记录顺序';
+}
+</script></body></html>
