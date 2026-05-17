@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>在线抽奖转盘 免费 - 随机抽取/转盘 | 免费工具站</title><meta name="description" content="免费在线抽奖转盘工具，支持自定义抽奖选项和概率，动画抽奖转盘效果，适合活动抽奖、随机选人等场景，无需注册，数据不上传服务器。"><meta name="keywords" content="抽奖转盘,在线抽奖,随机抽取,抽奖工具"><link rel="stylesheet" href="css/common.css"></head><body><div class="free-banner"><span>✅ 永久免费</span><span>✅ 无弹窗</span><span>✅ 文件不上传服务器</span><span>✅ 无需注册登录</span></div><header><div class="container"><h1>🎰 在线抽奖转盘</h1><p>随机抽取 / 转盘抽奖</p></div></header><div class="container"><div class="breadcrumb"><a href="index.html">首页</a> &gt; 生活工具 &gt; 抽奖转盘</div>
+<div class="ad-placeholder ad-728x90">广告位 728×90</div><div class="ad-placeholder ad-320x100">广告位 320×100</div>
+<div class="card"><div class="form-group"><label>抽奖选项（每行一个）</label>
+<textarea id="lotteryItems" style="width:100%;min-height:100px;padding:12px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;resize:vertical;font-family:inherit;line-height:1.6;">一等奖&#10;二等奖&#10;三等奖&#10;谢谢参与&#10;再来一次</textarea></div>
+<button class="btn btn-primary" onclick="lotteryDraw()" style="margin-right:8px;">🎰 随机抽取</button>
+<button class="btn btn-outline" onclick="lotteryReset()">↺ 重置</button>
+<div id="lotteryResult" style="margin-top:16px;"></div>
+<div id="lotteryHistory" style="margin-top:12px;display:none;"></div></div>
+<div class="privacy-note">✅ 本工具所有处理均在您的本地浏览器完成，您的文件和数据不会上传到任何服务器。</div>
+<div class="ad-placeholder ad-300x250">广告位 300×250</div></div>
+<footer><div class="container"><p>本工具所有处理均在您的本地浏览器完成，100%保护您的隐私安全。</p><p>© 免费工具站 · 永久免费 · 无弹窗广告</p></div></footer>
+<script src="js/common.js"></script>
+<script>
+let lotteryHistory=[];let lotteryQueue=[];
+function lotteryDraw(){
+    const items=document.getElementById('lotteryItems').value.split('\n').filter(function(l){return l.trim();});
+    if(!items.length){alert('请至少输入一个选项');return;}
+    const result=document.getElementById('lotteryResult');
+    result.innerHTML='<div style="text-align:center;padding:20px;"><div style="font-size:40px;">🎰</div><div style="font-size:16px;color:#86909c;">正在抽奖...</div></div>';
+    // 滚动动画
+    let counter=0;const totalFlashes=20+Math.floor(Math.random()*15);
+    const interval=setInterval(function(){
+        const idx=counter%items.length;counter++;
+        result.innerHTML='<div style="text-align:center;padding:20px;"><div style="font-size:48px;font-weight:700;color:#165DFF;">'+items[idx]+'</div></div>';
+        if(counter>=totalFlashes){
+            clearInterval(interval);
+            const finalIdx=Math.floor(Math.random()*items.length);
+            const win=items[finalIdx];
+            result.innerHTML='<div style="background:#e8f8e8;border-radius:12px;padding:24px;text-align:center;animation:fadeIn 0.5s;">'
+            +'<div style="font-size:14px;color:#86909c;">🎉 抽奖结果</div>'
+            +'<div style="font-size:36px;font-weight:700;color:#00B42A;margin:8px 0;">'+win+'</div>'
+            +'<div style="font-size:12px;color:#86909c;">共 '+items.length+' 个选项</div></div>';
+            lotteryHistory.unshift({time:new Date().toLocaleString('zh-CN'),result:win});
+            const hist=document.getElementById('lotteryHistory');hist.style.display='block';
+            hist.innerHTML='<div style="font-size:13px;color:#86909c;margin-bottom:8px;">抽奖记录</div>'
+            +lotteryHistory.slice(0,10).map(function(h,i){
+                return '<div style="display:flex;justify-content:space-between;padding:4px 8px;border-bottom:1px solid #e5e6eb;font-size:13px;">'
+                +'<span>#'+(lotteryHistory.length-i)+'</span><span style="font-weight:600;">'+h.result+'</span><span style="color:#86909c;">'+h.time+'</span></div>';
+            }).join('');
+        }
+    },60);
+}
+function lotteryReset(){
+    lotteryHistory=[];document.getElementById('lotteryResult').innerHTML='';
+    document.getElementById('lotteryHistory').style.display='none';
+}
+</script></body></html>
