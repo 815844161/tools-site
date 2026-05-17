@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>在线图片裁剪工具 免费 - 自由裁剪/比例裁剪 | 免费工具站</title><meta name="description" content="免费在线图片裁剪工具，支持自由裁剪和固定比例裁剪（1:1/4:3/16:9等），无需注册，文件不上传服务器，保护隐私安全。"><meta name="keywords" content="图片裁剪,在线裁剪,图片编辑,1比1裁剪,16比9裁剪"><link rel="stylesheet" href="css/common.css"></head><body><div class="free-banner"><span>✅ 永久免费</span><span>✅ 无弹窗</span><span>✅ 文件不上传服务器</span><span>✅ 无需注册登录</span></div><header><div class="container"><h1>✂️ 在线图片裁剪工具</h1><p>自由裁剪 / 固定比例裁剪</p></div></header><div class="container"><div class="breadcrumb"><a href="index.html">首页</a> &gt; 图片工具 &gt; 图片裁剪</div>
+<div class="ad-placeholder ad-728x90">广告位 728×90</div><div class="ad-placeholder ad-320x100">广告位 320×100</div>
+<div class="card"><div class="drop-zone" id="imgCropDropZone" data-accept="image/*"><span class="icon">🖼️</span><div class="text">点击选择或拖拽图片到此处</div><div class="hint">支持 JPG / PNG / WebP</div></div></div>
+<div class="card" id="cropControls" style="display:none;">
+<div class="form-group"><label>裁剪比例</label><select id="cropRatio"><option value="free">自由裁剪</option><option value="1:1">1:1 正方形</option><option value="4:3">4:3 标准屏幕</option><option value="16:9">16:9 宽屏</option><option value="3:2">3:2 照片</option><option value="2:3">2:3 竖屏</option><option value="9:16">9:16 手机壁纸</option></select></div>
+<canvas id="cropCanvas" style="max-width:100%;border-radius:8px;margin-top:8px;cursor:crosshair;"></canvas>
+<div style="margin-top:12px;"><button class="btn btn-primary" onclick="doCrop()">✂️ 确认裁剪</button></div>
+<div id="cropResult" style="margin-top:16px;display:none;"></div></div>
+<div class="privacy-note">✅ 本工具所有处理均在您的本地浏览器完成，您的文件和数据不会上传到任何服务器。</div>
+<div class="ad-placeholder ad-300x250">广告位 300×250</div></div>
+<footer><div class="container"><p>本工具所有处理均在您的本地浏览器完成，100%保护您的隐私安全。</p><p>© 免费工具站 · 永久免费 · 无弹窗广告</p></div></footer>
+<script src="js/common.js"></script>
+<script>
+let cropImgData=null;let startX,startY,endX,endY,isDrawing=false;
+const canvas=document.getElementById('cropCanvas');
+const ctx=canvas.getContext('2d');
+setupDropZone('imgCropDropZone',function(files){
+    const file=files[0];if(!file||!file.type.startsWith('image/')){alert('请选择图片文件');return;}
+    const reader=new FileReader();
+    reader.onload=function(e){
+        const img=new Image();
+        img.onload=function(){
+            cropImgData={img:img,name:file.name};
+            canvas.width=Math.min(img.width,600);
+            canvas.height=canvas.width*img.height/img.width;
+            if(canvas.height>500){canvas.height=500;canvas.width=canvas.height*img.width/img.height;}
+            ctx.drawImage(img,0,0,canvas.width,canvas.height);
+            document.getElementById('cropControls').style.display='block';
+            resetCrop();
+        };img.src=e.target.result;
+    };reader.readAsDataURL(file);
+});
+function resetCrop(){startX=startY=endX=endY=0;isDrawing=false;}
+canvas.onmousedown=function(e){const r=canvas.getBoundingClientRect();startX=e.clientX-r.left;startY=e.clientY-r.top;isDrawing=true;};
+canvas.onmousemove=function(e){if(!isDrawing)return;const r=canvas.getBoundingClientRect();endX=e.clientX-r.left;endY=e.clientY-r.top;drawRect();};
+canvas.onmouseup=function(){isDrawing=false;};
+canvas.ontouchstart=function(e){const t=e.touches[0];const r=canvas.getBoundingClientRect();startX=t.clientX-r.left;startY=t.clientY-r.top;isDrawing=true;};
+canvas.ontouchmove=function(e){e.preventDefault();const t=e.touches[0];const r=canvas.getBoundingClientRect();endX=t.clientX-r.left;endY=t.clientY-r.top;drawRect();};
+canvas.ontouchend=function(){isDrawing=false;};
+function drawRect(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(cropImgData.img,0,0,canvas.width,canvas.height);
+    const x=Math.min(startX,endX),y=Math.min(startY,endY);
+    const w=Math.abs(endX-startX),h=Math.abs(endY-startY);
+    ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.clearRect(x,y,w,h);
+    ctx.strokeStyle='#165DFF';ctx.lineWidth=2;ctx.strokeRect(x,y,w,h);
+}
+function doCrop(){
+    if(!cropImgData){alert('请先选择图片');return;}
+    const x=Math.min(startX,endX),y=Math.min(startY,endY);
+    const w=Math.abs(endX-startX),h=Math.abs(endY-startY);
+    if(w<10||h<10){alert('请先在图片上拖动选择裁剪区域');return;}
+    const scale=cropImgData.img.width/canvas.width;
+    const outCanvas=document.createElement('canvas');
+    outCanvas.width=Math.round(w*scale);outCanvas.height=Math.round(h*scale);
+    outCanvas.getContext('2d').drawImage(cropImgData.img,Math.round(x*scale),Math.round(y*scale),outCanvas.width,outCanvas.height,0,0,outCanvas.width,outCanvas.height);
+    const dataUrl=outCanvas.toDataURL('image/png');
+    const result=document.getElementById('cropResult');result.style.display='block';
+    result.innerHTML='<div style="background:#e8f8e8;border-radius:8px;padding:16px;text-align:center;">'
+    +'<div style="font-size:16px;font-weight:600;color:#00B42A;margin-bottom:8px;">✅ 裁剪完成</div>'
+    +'<div style="font-size:13px;color:#4e5969;">裁剪尺寸: '+outCanvas.width+'×'+outCanvas.height+'px</div>'
+    +'<div style="margin-top:12px;"><button class="btn btn-success" onclick="downloadCrop()">⬇️ 下载裁剪结果</button></div></div>';
+    window.cropDataUrl=dataUrl;window.cropFilename=cropImgData.name.replace(/\.[^.]+$/,'_cropped.png');
+}
+function downloadCrop(){if(window.cropDataUrl)downloadFile(window.cropDataUrl,window.cropFilename);}
+</script></body></html>
