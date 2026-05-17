@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>在线图片格式转换工具 免费 - JPG/PNG/WebP/GIF互转 | 免费工具站</title><meta name="description" content="免费在线图片格式转换工具，支持JPG/PNG/WebP/GIF格式互转，可调节输出质量，拖拽上传，无需注册，文件不上传服务器。"><meta name="keywords" content="图片格式转换,JPG转PNG,PNG转JPG,WebP转换,图片转换"><link rel="stylesheet" href="css/common.css"></head><body><div class="free-banner"><span>✅ 永久免费</span><span>✅ 无弹窗</span><span>✅ 文件不上传服务器</span><span>✅ 无需注册登录</span></div><header><div class="container"><h1>🔄 在线图片格式转换工具</h1><p>JPG / PNG / WebP / GIF 互转</p></div></header><div class="container"><div class="breadcrumb"><a href="index.html">首页</a> &gt; 图片工具 &gt; 图片格式转换</div>
+<div class="ad-placeholder ad-728x90">广告位 728×90</div><div class="ad-placeholder ad-320x100">广告位 320×100</div>
+<div class="card"><div class="drop-zone" id="imgFormatDropZone" data-accept="image/*"><span class="icon">🖼️</span><div class="text">点击选择或拖拽图片到此处</div><div class="hint">支持 JPG / PNG / WebP / GIF</div></div>
+<div id="formatControls" style="display:none;">
+<div class="form-row"><div class="form-group"><label>输出格式</label><select id="targetFormat"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></div>
+<div class="form-group"><label>输出质量</label><input type="range" id="formatQuality" min="0" max="100" value="92"><span id="formatQLabel" style="margin-left:8px;font-size:13px;color:#86909c;">92%</span></div></div>
+<button class="btn btn-primary" onclick="convertFormat()">🔄 开始转换</button></div>
+<div id="formatResult" style="margin-top:16px;display:none;"></div></div>
+<div class="privacy-note">✅ 本工具所有处理均在您的本地浏览器完成，您的文件和数据不会上传到任何服务器。</div>
+<div class="ad-placeholder ad-300x250">广告位 300×250</div></div>
+<footer><div class="container"><p>本工具所有处理均在您的本地浏览器完成，100%保护您的隐私安全。</p><p>© 免费工具站 · 永久免费 · 无弹窗广告</p></div></footer>
+<script src="js/common.js"></script>
+<script>
+let formatImgData=null;
+document.getElementById('formatQuality').oninput=function(){document.getElementById('formatQLabel').textContent=this.value+'%';};
+setupDropZone('imgFormatDropZone',function(files){
+    const file=files[0];if(!file||!file.type.startsWith('image/')){alert('请选择图片文件');return;}
+    const reader=new FileReader();
+    reader.onload=function(e){
+        const img=new Image();
+        img.onload=function(){
+            formatImgData={img:img,name:file.name};
+            document.getElementById('formatControls').style.display='block';
+            document.getElementById('formatResult').innerHTML='<div style="background:#e8f0ff;border-radius:8px;padding:14px;font-size:14px;text-align:center;">✅ 已加载: '+file.name+' ('+formatSize(file.size)+')<br>尺寸: '+img.width+'×'+img.height+'px</div>';
+            document.getElementById('formatResult').style.display='block';
+        };img.src=e.target.result;
+    };reader.readAsDataURL(file);
+});
+function convertFormat(){
+    if(!formatImgData){alert('请先选择图片');return;}
+    const q=parseInt(document.getElementById('formatQuality').value)/100;
+    const fmt=document.getElementById('targetFormat').value;
+    const canvas=document.createElement('canvas');
+    canvas.width=formatImgData.img.width;canvas.height=formatImgData.img.height;
+    canvas.getContext('2d').drawImage(formatImgData.img,0,0);
+    const dataUrl=canvas.toDataURL(fmt,q);
+    const base64=dataUrl.split(',')[1];
+    const size=Math.ceil(base64.length*3/4);
+    const ext=fmt.split('/')[1];
+    const filename=formatImgData.name.replace(/\.[^.]+$/,'.'+ext);
+    const result=document.getElementById('formatResult');
+    result.innerHTML='<div style="background:#e8f8e8;border-radius:8px;padding:16px;text-align:center;">'
+    +'<div style="font-size:16px;font-weight:600;color:#00B42A;margin-bottom:8px;">✅ 转换完成</div>'
+    +'<div style="font-size:13px;color:#4e5969;">输出大小: '+formatSize(size)+'</div>'
+    +'<div style="margin-top:12px;"><button class="btn btn-success" onclick="downloadFormat()">⬇️ 下载 <code>'+filename+'</code></button></div></div>';
+    window.formatDataUrl=dataUrl;window.formatFilename=filename;
+}
+function downloadFormat(){if(window.formatDataUrl)downloadFile(window.formatDataUrl,window.formatFilename);}
+</script></body></html>
