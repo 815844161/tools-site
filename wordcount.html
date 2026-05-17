@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>在线字数统计工具 免费 - 字数/字符/汉字统计 | 免费工具站</title><meta name="description" content="免费在线字数统计工具，实时统计中英文字数、字符数、段落数、行数、标点符号数，支持粘贴和拖拽上传文本文件，无需注册，数据不上传服务器。"><meta name="keywords" content="字数统计,在线字数统计,字符计数,段落统计,汉字统计"><link rel="stylesheet" href="css/common.css"></head><body><div class="free-banner"><span>✅ 永久免费</span><span>✅ 无弹窗</span><span>✅ 文件不上传服务器</span><span>✅ 无需注册登录</span></div><header><div class="container"><h1>📝 在线字数统计工具</h1><p>实时统计字数/字符/段落/行数</p></div></header><div class="container"><div class="breadcrumb"><a href="index.html">首页</a> &gt; 文本工具 &gt; 在线字数统计</div>
+<div class="ad-placeholder ad-728x90">广告位 728×90</div><div class="ad-placeholder ad-320x100">广告位 320×100</div>
+<div class="card"><div class="drop-zone" id="wordDropZone"><span class="icon">📄</span><div class="text">点击选择或拖拽文本文件到此处</div><div class="hint">支持 .txt 格式</div></div>
+<textarea id="textInput" style="width:100%;min-height:200px;padding:14px;border:1px solid var(--border);border-radius:var(--radius);font-size:15px;resize:vertical;font-family:inherit;line-height:1.8;" placeholder="在此输入或粘贴要统计的文字..."></textarea>
+<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+<button class="btn btn-danger btn-sm" onclick="clearText()">🗑️ 清空</button>
+<button class="btn btn-success btn-sm" onclick="copyResult()">📋 复制结果</button>
+</div></div>
+<div class="card"><h2 style="font-size:16px;margin-bottom:12px;">📊 统计结果</h2>
+<div id="statsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;">
+<div class="stat-item" style="background:#f5f7fa;border-radius:8px;padding:14px;text-align:center;"><div style="font-size:12px;color:#86909c;">总字符数</div><div style="font-size:24px;font-weight:700;color:#165DFF;" id="charCount">0</div></div>
+<div class="stat-item" style="background:#f5f7fa;border-radius:8px;padding:14px;text-align:center;"><div style="font-size:12px;color:#86909c;">不计空格</div><div style="font-size:24px;font-weight:700;color:#165DFF;" id="charNoSpace">0</div></div>
+<div class="stat-item" style="background:#f5f7fa;border-radius:8px;padding:14px;text-align:center;"><div style="font-size:12px;color:#86909c;">汉字数</div><div style="font-size:24px;font-weight:700;color:#165DFF;" id="hanCount">0</div></div>
+<div class="stat-item" style="background:#f5f7fa;border-radius:8px;padding:14px;text-align:center;"><div style="font-size:12px;color:#86909c;">英文单词</div><div style="font-size:24px;font-weight:700;color:#165DFF;" id="engCount">0</div></div>
+<div class="stat-item" style="background:#f5f7fa;border-radius:8px;padding:14px;text-align:center;"><div style="font-size:12px;color:#86909c;">行数</div><div style="font-size:24px;font-weight:700;color:#165DFF;" id="lineCount">0</div></div>
+<div class="stat-item" style="background:#f5f7fa;border-radius:8px;padding:14px;text-align:center;"><div style="font-size:12px;color:#86909c;">段落数</div><div style="font-size:24px;font-weight:700;color:#165DFF;" id="paraCount">0</div></div>
+<div class="stat-item" style="background:#f5f7fa;border-radius:8px;padding:14px;text-align:center;"><div style="font-size:12px;color:#86909c;">标点符号</div><div style="font-size:24px;font-weight:700;color:#165DFF;" id="puncCount">0</div></div>
+<div class="stat-item" style="background:#f5f7fa;border-radius:8px;padding:14px;text-align:center;"><div style="font-size:12px;color:#86909c;">数字数</div><div style="font-size:24px;font-weight:700;color:#165DFF;" id="digitCount">0</div></div>
+</div></div>
+<div class="privacy-note">✅ 本工具所有处理均在您的本地浏览器完成，您的文件和数据不会上传到任何服务器，100%保护您的隐私安全。</div>
+<div class="ad-placeholder ad-300x250">广告位 300×250</div>
+</div>
+<footer><div class="container"><p>本工具所有处理均在您的本地浏览器完成，100%保护您的隐私安全。</p><p>© 免费工具站 · 永久免费 · 无弹窗广告</p></div></footer>
+<script src="js/common.js"></script>
+<script>
+const input = document.getElementById('textInput');
+function updateStats() {
+    const t = input.value; const l = t.length;
+    document.getElementById('charCount').textContent = l;
+    document.getElementById('charNoSpace').textContent = t.replace(/\s/g,'').length;
+    document.getElementById('hanCount').textContent = (t.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g)||[]).length;
+    const eng = t.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g,' ');
+    document.getElementById('engCount').textContent = eng.split(/\s+/).filter(function(w){return w.length>0&&/[a-zA-Z]/.test(w);}).length;
+    document.getElementById('lineCount').textContent = l===0?0:t.split('\n').length;
+    document.getElementById('paraCount').textContent = t.split(/\n\s*\n/).filter(function(p){return p.trim().length>0;}).length;
+    document.getElementById('puncCount').textContent = (t.match(/[，。、；：？！""''（）【】《》—…·\.\,\;\:\!\?\(\)\[\]\{\}]/g)||[]).length;
+    document.getElementById('digitCount').textContent = (t.match(/\d/g)||[]).length;
+}
+function clearText(){input.value='';updateStats();input.focus();}
+function copyResult(){
+    const d=document.getElementById('statsGrid').querySelectorAll('.stat-item');
+    let s='字数统计结果：\n';d.forEach(function(item){
+        s+=item.querySelector('div:first-child').textContent+': '+item.querySelector('div:last-child').textContent+'\n';
+    });
+    copyText(s,'copyTip');
+}
+input.addEventListener('input',updateStats);
+(function(){
+    const zone=document.getElementById('wordDropZone');
+    zone.addEventListener('dragover',function(e){e.preventDefault();this.classList.add('dragover');});
+    zone.addEventListener('dragleave',function(){this.classList.remove('dragover');});
+    zone.addEventListener('drop',function(e){e.preventDefault();this.classList.remove('dragover');
+        const file=e.dataTransfer.files[0];if(!file)return;
+        const r=new FileReader();r.onload=function(e){input.value=e.target.result;updateStats();};r.readAsText(file);
+    });
+    zone.addEventListener('click',function(){
+        const inp=document.createElement('input');inp.type='file';inp.accept='.txt';
+        inp.onchange=function(){if(this.files[0]){var r=new FileReader();r.onload=function(e){input.value=e.target.result;updateStats();};r.readAsText(this.files[0]);}};inp.click();
+    });
+})();
+</script></body></html>
