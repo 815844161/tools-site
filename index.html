@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鍦ㄧ嚎瀛楁暟缁熻宸ュ叿 - 鍏嶈垂瀛楃璁℃暟銆佹钀藉垎鏋?/title>
+    <meta name="description" content="鍏嶈垂鍦ㄧ嚎瀛楁暟缁熻宸ュ叿锛屾敮鎸佺粺璁′腑鑻辨枃瀛楁暟銆佸瓧绗︽暟銆佹钀芥暟銆佽鏁帮紝瀹炴椂璁＄畻锛屾棤闇€瀹夎锛屽畬鍏ㄥ厤璐广€?>
+    <meta name="keywords" content="瀛楁暟缁熻,鍦ㄧ嚎瀛楁暟缁熻,瀛楃璁℃暟,娈佃惤缁熻,鍏嶈垂宸ュ叿">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://815844161.pages.dev">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5; color: #333; min-height: 100vh;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { 
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white; padding: 40px 0; text-align: center; margin-bottom: 30px;
+        }
+        header h1 { font-size: 28px; margin-bottom: 10px; }
+        header p { opacity: 0.9; font-size: 16px; }
+        .card {
+            background: white; border-radius: 12px; padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px;
+        }
+        .card h2 { font-size: 18px; margin-bottom: 16px; color: #444; }
+        textarea {
+            width: 100%; min-height: 250px; padding: 16px; font-size: 16px;
+            border: 2px solid #e0e0e0; border-radius: 8px; resize: vertical;
+            font-family: inherit; line-height: 1.6; transition: border-color 0.3s;
+        }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px; margin-top: 16px;
+        }
+        .stat-item {
+            background: #f8f9ff; border-radius: 8px; padding: 16px; text-align: center;
+        }
+        .stat-item .number {
+            font-size: 28px; font-weight: 700; color: #667eea; display: block;
+        }
+        .stat-item .label { font-size: 13px; color: #888; margin-top: 4px; }
+        .footer-text {
+            text-align: center; color: #999; font-size: 13px; padding: 30px 0;
+        }
+        .btn-clear {
+            background: #ff4757; color: white; border: none; padding: 8px 20px;
+            border-radius: 6px; font-size: 14px; cursor: pointer; margin-top: 12px;
+        }
+        .btn-clear:hover { background: #ee3b4b; }
+        .btn-copy {
+            background: #2ed573; color: white; border: none; padding: 8px 20px;
+            border-radius: 6px; font-size: 14px; cursor: pointer; margin-top: 12px;
+            margin-left: 8px;
+        }
+        .btn-copy:hover { background: #26bf66; }
+        .more-tools {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px; margin-top: 16px;
+        }
+        .more-tools a {
+            display: block; padding: 14px; background: #f8f9ff; border-radius: 8px;
+            text-decoration: none; color: #667eea; font-weight: 500;
+            text-align: center; transition: background 0.2s;
+        }
+        .more-tools a:hover { background: #eef0ff; }
+        @media (max-width: 600px) {
+            header h1 { font-size: 22px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>馃摑 鍦ㄧ嚎瀛楁暟缁熻宸ュ叿</h1>
+            <p>瀹炴椂缁熻涓嫳鏂囧瓧鏁般€佸瓧绗︽暟銆佹钀芥暟锛屽畬鍏ㄥ厤璐?/p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>鉁忥笍 杈撳叆鏂囨湰</h2>
+            <textarea id="textInput" placeholder="鍦ㄦ杈撳叆鎴栫矘璐磋缁熻鐨勬枃瀛?.."></textarea>
+            <div>
+                <button class="btn-clear" onclick="clearText()">娓呯┖</button>
+                <button class="btn-copy" onclick="copyText()">澶嶅埗缁撴灉</button>
+                <span id="copyTip" style="margin-left:10px;font-size:13px;color:#2ed573;display:none;">鉁?宸插鍒?/span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>馃搳 缁熻缁撴灉</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="number" id="charCount">0</span>
+                    <span class="label">鎬诲瓧绗︽暟</span>
+                </div>
+                <div class="stat-item">
+                    <span class="number" id="charNoSpace">0</span>
+                    <span class="label">涓嶈绌烘牸</span>
+                </div>
+                <div class="stat-item">
+                    <span class="number" id="wordCount">0</span>
+                    <span class="label">涓枃瀛楁暟</span>
+                </div>
+                <div class="stat-item">
+                    <span class="number" id="engWordCount">0</span>
+                    <span class="label">鑻辨枃鍗曡瘝鏁?/span>
+                </div>
+                <div class="stat-item">
+                    <span class="number" id="lineCount">0</span>
+                    <span class="label">琛屾暟</span>
+                </div>
+                <div class="stat-item">
+                    <span class="number" id="paraCount">0</span>
+                    <span class="label">娈佃惤鏁?/span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>馃敡 鏇村宸ュ叿</h2>
+            <div class="more-tools">
+                <a href="#">馃攽 闅忔満瀵嗙爜鐢熸垚鍣?/a>
+                <a href="#">馃帹 棰滆壊杞崲鍣?/a>
+                <a href="#"><span id="extraTools"></span></a>
+                <a href="#">鈴?鍦ㄧ嚎鍊掕鏃?/a>
+            </div>
+        </div>
+
+        <div class="footer-text">
+            <p>绾湪绾垮伐鍏?路 涓嶅瓨鍌ㄤ换浣曞唴瀹?路 瀹屽叏鍏嶈垂</p>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('textInput');
+        
+        function updateStats() {
+            const text = input.value;
+            const charCount = text.length;
+            const charNoSpace = text.replace(/\s/g, '').length;
+            
+            // 涓枃瀛楁暟
+            const chineseChars = (text.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g) || []).length;
+            
+            // 鑻辨枃鍗曡瘝鏁?            const engText = text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g, ' ');
+            const engWords = engText.split(/\s+/).filter(w => w.length > 0 && /[a-zA-Z]/.test(w)).length;
+            
+            // 琛屾暟
+            const lines = text.split('\n');
+            const lineCount = text.length === 0 ? 0 : lines.length;
+            
+            // 娈佃惤鏁?            const paras = text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+            const paraCount = paras.length;
+
+            document.getElementById('charCount').textContent = charCount;
+            document.getElementById('charNoSpace').textContent = charNoSpace;
+            document.getElementById('wordCount').textContent = chineseChars;
+            document.getElementById('engWordCount').textContent = engWords;
+            document.getElementById('lineCount').textContent = lineCount;
+            document.getElementById('paraCount').textContent = paraCount;
+        }
+
+        function clearText() {
+            input.value = '';
+            updateStats();
+            input.focus();
+        }
+
+        function copyText() {
+            const stats = document.querySelectorAll('.stat-item');
+            let text = `瀛楁暟缁熻缁撴灉锛歕n`;
+            stats.forEach(item => {
+                const num = item.querySelector('.number').textContent;
+                const label = item.querySelector('.label').textContent;
+                text += `${label}: ${num}\n`;
+            });
+            navigator.clipboard.writeText(text).then(() => {
+                const tip = document.getElementById('copyTip');
+                tip.style.display = 'inline';
+                setTimeout(() => { tip.style.display = 'none'; }, 2000);
+            });
+        }
+
+        input.addEventListener('input', updateStats);
+
+        // ------- 鑷姩鏇存柊 -------
+        // 姣?0鍒嗛挓鍒锋柊
+        setInterval(() => {
+            const now = new Date();
+            console.log('Heartbeat:', now.toLocaleString('zh-CN'));
+        }, 1800000);
+    </script>
+</body>
+</html>
