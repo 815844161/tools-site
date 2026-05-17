@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>在线二维码生成器 免费 - 文本/网址生成二维码 | 免费工具站</title><meta name="description" content="免费在线二维码生成器，输入文本或网址即可生成二维码图片，支持调节大小和颜色，无需注册，数据不上传服务器，保护隐私安全。"><meta name="keywords" content="二维码生成器,二维码,QR码,二维码工具"><link rel="stylesheet" href="css/common.css"></head><body><div class="free-banner"><span>✅ 永久免费</span><span>✅ 无弹窗</span><span>✅ 文件不上传服务器</span><span>✅ 无需注册登录</span></div><header><div class="container"><h1>📱 在线二维码生成器</h1><p>输入文本或网址生成二维码图片</p></div></header><div class="container"><div class="breadcrumb"><a href="index.html">首页</a> &gt; 设计工具 &gt; 二维码生成器</div>
+<div class="ad-placeholder ad-728x90">广告位 728×90</div><div class="ad-placeholder ad-320x100">广告位 320×100</div>
+<div class="card"><div class="form-group"><label>输入内容（文本或网址）</label><input type="text" id="qrText" value="https://0c059440.tools-site-7n4.pages.dev" placeholder="输入要生成二维码的文本或网址" style="width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:15px;"></div>
+<div class="form-row"><div class="form-group"><label>尺寸</label><select id="qrSize"><option value="150">小 (150px)</option><option value="200" selected>中 (200px)</option><option value="300">大 (300px)</option><option value="400">超大 (400px)</option></select></div>
+<div class="form-group"><label>前景色</label><input type="color" id="qrFg" value="#165DFF"></div>
+<div class="form-group"><label>背景色</label><input type="color" id="qrBg" value="#FFFFFF"></div></div>
+<button class="btn btn-primary" onclick="genQR()">📱 生成二维码</button></div>
+<div class="card" id="qrResultCard" style="display:none;"><div id="qrResult" style="text-align:center;"></div>
+<div style="margin-top:12px;text-align:center;"><button class="btn btn-success" onclick="downloadQR()">⬇️ 下载二维码</button></div></div>
+<div class="privacy-note">✅ 本工具所有处理均在您的本地浏览器完成，您的文件和数据不会上传到任何服务器。</div>
+<div class="ad-placeholder ad-300x250">广告位 300×250</div></div>
+<footer><div class="container"><p>本工具所有处理均在您的本地浏览器完成，100%保护您的隐私安全。</p><p>© 免费工具站 · 永久免费 · 无弹窗广告</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/common.js"></script>
+<script>
+let qrCodeInstance=null;
+function genQR(){
+    const text=document.getElementById('qrText').value.trim();
+    if(!text){alert('请输入要生成二维码的内容');return;}
+    const size=parseInt(document.getElementById('qrSize').value);
+    const fg=document.getElementById('qrFg').value;
+    const bg=document.getElementById('qrBg').value;
+    const card=document.getElementById('qrResultCard');card.style.display='block';
+    const container=document.getElementById('qrResult');container.innerHTML='';
+    qrCodeInstance=new QRCode(container,{text:text,width:size,height:size,colorDark:fg,colorLight:bg,correctLevel:QRCode.CorrectLevel.H});
+}
+function downloadQR(){
+    const img=document.querySelector('#qrResult img')||document.querySelector('#qrResult canvas');
+    if(!img)return;
+    const canvas=document.querySelector('#qrResult canvas');
+    if(canvas){downloadFile(canvas.toDataURL('image/png'),'qrcode.png');}
+    else{const c=document.createElement('canvas');c.width=img.width;c.height=img.height;
+        c.getContext('2d').drawImage(img,0,0);downloadFile(c.toDataURL('image/png'),'qrcode.png');}
+}
+</script></body></html>
