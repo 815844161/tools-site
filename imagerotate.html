@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>在线图片旋转翻转工具 免费 - 图片旋转/镜像 | 免费工具站</title><meta name="description" content="免费在线图片旋转翻转工具，支持任意角度旋转，水平和垂直翻转，支持JPG/PNG/WebP输出，无需注册，文件不上传服务器。"><meta name="keywords" content="图片旋转,图片翻转,镜像翻转,在线编辑图片"><link rel="stylesheet" href="css/common.css"></head><body><div class="free-banner"><span>✅ 永久免费</span><span>✅ 无弹窗</span><span>✅ 文件不上传服务器</span><span>✅ 无需注册登录</span></div><header><div class="container"><h1>🔄 在线图片旋转翻转工具</h1><p>任意角度旋转 / 水平垂直翻转</p></div></header><div class="container"><div class="breadcrumb"><a href="index.html">首页</a> &gt; 图片工具 &gt; 图片旋转</div>
+<div class="ad-placeholder ad-728x90">广告位 728×90</div><div class="ad-placeholder ad-320x100">广告位 320×100</div>
+<div class="card"><div class="drop-zone" id="imgRotateDropZone" data-accept="image/*"><span class="icon">🖼️</span><div class="text">点击选择或拖拽图片到此处</div><div class="hint">支持 JPG / PNG / WebP</div></div></div>
+<div class="card" id="rotateControls" style="display:none;">
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+<button class="btn btn-outline btn-sm" onclick="rotateImg(-90)">↩ 左旋 90°</button>
+<button class="btn btn-outline btn-sm" onclick="rotateImg(90)">↪ 右旋 90°</button>
+<button class="btn btn-outline btn-sm" onclick="rotateImg(180)">↻ 旋转 180°</button>
+<button class="btn btn-outline btn-sm" onclick="flipImg('h')">↔ 水平翻转</button>
+<button class="btn btn-outline btn-sm" onclick="flipImg('v')">↕ 垂直翻转</button>
+</div>
+<div class="form-group"><label>输出格式</label><select id="rotateFormat"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></div>
+<button class="btn btn-primary" onclick="saveRotated()">💾 保存图片</button>
+<div id="rotateResult" style="margin-top:16px;display:none;"></div></div>
+<div class="privacy-note">✅ 本工具所有处理均在您的本地浏览器完成，您的文件和数据不会上传到任何服务器。</div>
+<div class="ad-placeholder ad-300x250">广告位 300×250</div></div>
+<footer><div class="container"><p>本工具所有处理均在您的本地浏览器完成，100%保护您的隐私安全。</p><p>© 免费工具站 · 永久免费 · 无弹窗广告</p></div></footer>
+<script src="js/common.js"></script>
+<script>
+let rotateSrc=null;let currentRotation=0;let currentFlipH=false,currentFlipV=false;
+const rotateCanvas=document.getElementById('rotateCanvas')||(()=>{const c=document.createElement('canvas');c.id='rotateCanvas';c.style.maxWidth='100%';c.style.borderRadius='8px';document.getElementById('rotateControls').insertBefore(c,document.getElementById('rotateControls').firstChild);return c;})();
+setupDropZone('imgRotateDropZone',function(files){
+    const file=files[0];if(!file||!file.type.startsWith('image/')){alert('请选择图片文件');return;}
+    const reader=new FileReader();
+    reader.onload=function(e){
+        const img=new Image();
+        img.onload=function(){
+            rotateSrc=img;currentRotation=0;currentFlipH=currentFlipV=false;
+            document.getElementById('rotateControls').style.display='block';
+            document.getElementById('rotateResult').style.display='none';
+            renderRotated();
+        };img.src=e.target.result;
+    };reader.readAsDataURL(file);
+});
+function renderRotated(){
+    if(!rotateSrc)return;
+    const canvas=document.getElementById('rotateCanvas');
+    const angle=currentRotation*Math.PI/180;
+    const w=rotateSrc.width,h=rotateSrc.height;
+    let nw,nh;
+    if(currentRotation%180===0){nw=w;nh=h;}else{nw=h;nh=w;}
+    canvas.width=nw;canvas.height=nh;
+    const ctx=canvas.getContext('2d');ctx.clearRect(0,0,nw,nh);ctx.save();
+    ctx.translate(nw/2,nh/2);ctx.rotate(angle);
+    if(currentFlipH)ctx.scale(-1,1);
+    if(currentFlipV)ctx.scale(1,-1);
+    ctx.drawImage(rotateSrc,-w/2,-h/2,w,h);ctx.restore();
+}
+function rotateImg(deg){currentRotation=(currentRotation+deg+360)%360;renderRotated();}
+function flipImg(dir){if(dir==='h')currentFlipH=!currentFlipH;else currentFlipV=!currentFlipV;renderRotated();}
+function saveRotated(){
+    if(!rotateSrc)return;
+    const canvas=document.getElementById('rotateCanvas');
+    const fmt=document.getElementById('rotateFormat').value;
+    const dataUrl=canvas.toDataURL(fmt,0.92);
+    const ext=fmt.split('/')[1];
+    const filename='rotated.'+ext;
+    downloadFile(dataUrl,filename);
+    document.getElementById('rotateResult').style.display='block';
+    document.getElementById('rotateResult').innerHTML='<div style="background:#e8f8e8;border-radius:8px;padding:12px;text-align:center;font-size:14px;color:#00B42A;">✅ 下载已开始</div>';
+    setTimeout(function(){document.getElementById('rotateResult').style.display='none';},3000);
+}
+</script></body></html>
