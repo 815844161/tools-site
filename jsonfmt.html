@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>JSON格式化工具 在线免费 - JSON校验/压缩 | 免费工具站</title><meta name="description" content="免费在线JSON格式化工具，支持JSON语法校验、自动格式化、压缩、语法高亮显示，无需注册，数据不上传服务器，开发人员必备工具。"><meta name="keywords" content="JSON格式化,JSON校验,JSON压缩,在线JSON,JSON工具"><link rel="stylesheet" href="css/common.css"></head><body><div class="free-banner"><span>✅ 永久免费</span><span>✅ 无弹窗</span><span>✅ 文件不上传服务器</span><span>✅ 无需注册登录</span></div><header><div class="container"><h1>📋 JSON格式化工具</h1><p>JSON校验 / 格式化 / 压缩 / 语法高亮</p></div></header><div class="container"><div class="breadcrumb"><a href="index.html">首页</a> &gt; 开发工具 &gt; JSON格式化</div>
+<div class="ad-placeholder ad-728x90">广告位 728×90</div><div class="ad-placeholder ad-320x100">广告位 320×100</div>
+<div class="card"><textarea id="jsonInput" style="width:100%;min-height:200px;padding:14px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;resize:vertical;font-family:'Courier New',monospace;line-height:1.6;" placeholder='输入JSON字符串，例如：{"name":"张三","age":18}'></textarea>
+<div style="margin:12px 0;display:flex;gap:8px;flex-wrap:wrap;">
+<button class="btn btn-primary btn-sm" onclick="formatJSON()">📋 格式化</button>
+<button class="btn btn-primary btn-sm" onclick="compressJSON()">📦 压缩</button>
+<button class="btn btn-primary btn-sm" onclick="validateJSON()">✅ 校验</button>
+<button class="btn btn-danger btn-sm" onclick="clearJSON()">🗑️ 清空</button>
+</div></div>
+<div class="card"><h2 style="font-size:16px;margin-bottom:12px;">📤 输出</h2>
+<textarea id="jsonOutput" readonly style="width:100%;min-height:200px;padding:14px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;resize:vertical;font-family:'Courier New',monospace;line-height:1.6;background:#f9f9f9;"></textarea>
+<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+<button class="btn btn-success btn-sm" onclick="copyJSON()">📋 复制结果</button>
+<span id="jsonCopyTip" style="margin-left:8px;font-size:13px;color:#00B42A;display:none;">✅ 已复制</span>
+</div></div>
+<div class="privacy-note">✅ 本工具所有处理均在您的本地浏览器完成，您的文件和数据不会上传到任何服务器。</div>
+<div class="ad-placeholder ad-300x250">广告位 300×250</div></div>
+<footer><div class="container"><p>本工具所有处理均在您的本地浏览器完成，100%保护您的隐私安全。</p><p>© 免费工具站 · 永久免费 · 无弹窗广告</p></div></footer>
+<script src="js/common.js"></script>
+<script>
+function processJSON(callback){
+    const input=document.getElementById('jsonInput').value.trim();
+    if(!input){setJSONOutput('',true,'warning','请输入JSON字符串');return;}
+    try{const parsed=JSON.parse(input);callback(parsed);}
+    catch(e){setJSONOutput('',true,'error','❌ JSON语法错误：'+e.message);}
+}
+function setJSONOutput(text,isError,type,msg){
+    const out=document.getElementById('jsonOutput');
+    if(isError){out.value=msg;out.style.color='#F53F3F';}else{out.value=text;out.style.color='var(--text)';}
+    if(msg){const div=document.createElement('div');div.style.padding='8px 12px';div.style.borderRadius='4px';div.style.marginBottom='8px';
+        if(type==='error'){div.style.background='#ffecec';div.style.color='#F53F3F';}else if(type==='success'){div.style.background='#e8f8e8';div.style.color='#00B42A';}else{div.style.background='#fff7e6';div.style.color='#FF7D00';}
+        div.textContent=msg;div.id='jsonMsg';
+        const old=document.getElementById('jsonMsg');if(old)old.remove();
+        document.querySelector('.card').insertBefore(div,document.querySelector('.card').children[1]);
+        setTimeout(function(){if(div.parentNode)div.remove();},3000);
+    }
+}
+function formatJSON(){processJSON(function(p){setJSONOutput(JSON.stringify(p,null,4),false);setJSONOutput('',false,'success','✅ JSON格式正确，已格式化');});}
+function compressJSON(){processJSON(function(p){setJSONOutput(JSON.stringify(p),false);setJSONOutput('',false,'success','✅ JSON已压缩');});}
+function validateJSON(){processJSON(function(p){setJSONOutput(document.getElementById('jsonInput').value,false,'success','✅ JSON格式正确，共 '+(typeof p==='object'?Object.keys(p).length:'N/A')+' 个顶层键');});}
+function clearJSON(){document.getElementById('jsonInput').value='';document.getElementById('jsonOutput').value='';}
+function copyJSON(){copyText(document.getElementById('jsonOutput').value,'jsonCopyTip');}
+</script></body></html>
