@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>在线文本对比工具 免费 - 文本差异比较 | 免费工具站</title><meta name="description" content="免费在线文本对比工具，对比两段文本的差异，支持逐行对比，高亮显示增删改的内容，适用于代码对比、文章修改等场景。"><meta name="keywords" content="文本对比,文本差异,文本比较,代码对比,文本工具"><link rel="stylesheet" href="css/common.css"></head><body><div class="free-banner"><span>✅ 永久免费</span><span>✅ 无弹窗</span><span>✅ 文件不上传服务器</span><span>✅ 无需注册登录</span></div><header><div class="container"><h1>📊 在线文本对比工具</h1><p>逐行对比两段文本差异</p></div></header><div class="container"><div class="breadcrumb"><a href="index.html">首页</a> &gt; 文本工具 &gt; 文本对比</div>
+<div class="ad-placeholder ad-728x90">广告位 728×90</div><div class="ad-placeholder ad-320x100">广告位 320×100</div>
+<div class="card"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+<div><div style="font-size:12px;color:#86909c;margin-bottom:4px;">🔵 原文本</div>
+<textarea id="diffOld" style="width:100%;min-height:150px;padding:12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;resize:vertical;font-family:'Courier New',monospace;line-height:1.6;" placeholder="输入原文本..."></textarea></div>
+<div><div style="font-size:12px;color:#86909c;margin-bottom:4px;">🟢 新文本</div>
+<textarea id="diffNew" style="width:100%;min-height:150px;padding:12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;resize:vertical;font-family:'Courier New',monospace;line-height:1.6;" placeholder="输入新文本..."></textarea></div></div>
+<button class="btn btn-primary" onclick="diffText()" style="margin-top:12px;">📊 对比差异</button>
+<div id="diffResult" style="margin-top:16px;display:none;"></div></div>
+<div class="privacy-note">✅ 本工具所有处理均在您的本地浏览器完成，您的文件和数据不会上传到任何服务器。</div>
+<div class="ad-placeholder ad-300x250">广告位 300×250</div></div>
+<footer><div class="container"><p>本工具所有处理均在您的本地浏览器完成，100%保护您的隐私安全。</p><p>© 免费工具站 · 永久免费 · 无弹窗广告</p></div></footer>
+<script src="js/common.js"></script>
+<script>
+function diffText(){
+    const oldLines=document.getElementById('diffOld').value.split('\n');
+    const newLines=document.getElementById('diffNew').value.split('\n');
+    const result=document.getElementById('diffResult');result.style.display='block';
+    let html='<div style="background:#f5f7fa;border-radius:8px;padding:12px;font-family:Courier New,monospace;font-size:13px;line-height:2;max-height:400px;overflow-y:auto;">';
+    // 简单逐行对比（有差异标色，相同的显示灰色）
+    const maxLen=Math.max(oldLines.length,newLines.length);
+    let added=0,removed=0,unChanged=0;
+    for(let i=0;i<maxLen;i++){
+        const oldLine=oldLines[i]||'',newLine=newLines[i]||'';
+        if(oldLine===newLine){
+            html+='<div style="color:#86909c;">  '+escapeHtml(oldLine||' ')+'</div>';unChanged++;
+        }else{
+            if(oldLine)html+='<div style="color:#F53F3F;background:#ffecec;">- '+escapeHtml(oldLine)+'</div>';
+            if(newLine)html+='<div style="color:#00B42A;background:#e8f8e8;">+ '+escapeHtml(newLine)+'</div>';
+            if(oldLine&&newLine){removed++;added++;}
+            else if(oldLine)removed++;
+            else if(newLine)added++;
+        }
+    }
+    html+='</div>';
+    html+='<div style="display:flex;gap:16px;margin-top:8px;font-size:13px;">'
+    +'<span>📊 总计 '+maxLen+' 行</span>'
+    +'<span style="color:#00B42A;">+'+added+' 增加</span>'
+    +'<span style="color:#F53F3F;">-'+removed+' 删除</span>'
+    +'<span style="color:#86909c;">='+unChanged+' 相同</span></div>';
+    result.innerHTML=html;
+}
+function escapeHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script></body></html>
